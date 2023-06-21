@@ -1,3 +1,5 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -7,7 +9,21 @@ import 'package:app2/modules/auth/widget/data_btlvixuly.dart';
 import '../../../themes/spacing.dart';
 
 class wigetAir extends StatelessWidget {
-  const wigetAir({super.key});
+  const wigetAir({Key? key}) : super(key: key);
+  
+Future<void> _getdata() async {
+  final db=FirebaseFirestore.instance;
+  final ref=db.collection("data").doc("EXraLr34Zkxv12M8SKKN").withConverter(
+      fromFirestore: databtl.fromFirestore,
+      toFirestore: (databtl data, _) => data.toFirestore(),
+    );
+final docSnap = await ref.get();
+final data = docSnap.data(); // Convert to City object
+if (data != null) {
+  print(data);
+} else {
+  print("No such document.");
+}
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +37,7 @@ class wigetAir extends StatelessWidget {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))),
       alignment: Alignment.center,
       width: 400,
-      height: 80,
+      height: 77,
     child: Text('\t\t\t\t\t\t\t\t\tBách Khoa\n Hai Bà Trưng,Hà Nội',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight:FontWeight.w700),)
     ),
     Container(
@@ -38,8 +54,8 @@ class wigetAir extends StatelessWidget {
           ),ClipOval(
   child: Image.asset(
     'assets/images/like.jpg',
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     fit: BoxFit.cover,
   ),
 ),
@@ -55,21 +71,21 @@ Text('warning!',style: TextStyle(color: Color.fromARGB(255, 226, 175, 8),fontSiz
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12),bottomRight: Radius.circular(12))),
       
     child: Column(children: [
-      Spacing.h16,
+      Spacing.h12,
       Text('Cập nhật ngày 13/6/2023 14h30'),
       Spacing.h12,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             children: [
-              Text('CO2(ug/m^3)',style: TextStyle(color:Colors.blue)),
+              const Text('CO2(ug/m^3)',style: TextStyle(color:Colors.blue)),
               Text('300')
             ],
           ),
           Column(
             children: [
               Text('PM2.5(ug/m^3)',style: TextStyle(color:Colors.blue)),
-              Text('20')
+              Text(data.toString())
             ],
           ),
           Column(
@@ -85,7 +101,7 @@ Text('warning!',style: TextStyle(color: Color.fromARGB(255, 226, 175, 8),fontSiz
   ]
   ),
 ),
-Spacing.h16,
+Spacing.h4,
 SfRadialGauge(
 axes: <RadialAxis>[
 RadialAxis(
@@ -140,9 +156,23 @@ GaugeAnnotation(
 )
 ],
 ),
-Text('Công tơ đo chỉ số AQI',style: TextStyle(color: Color.fromARGB(255, 128, 97, 4),fontSize: 18,fontWeight: FontWeight.w700),
+
+Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+        Text('Công tơ đo chỉ số AQI',style: TextStyle(color: Color.fromARGB(255, 128, 97, 4),fontSize: 18,fontWeight: FontWeight.w700),
+    
+    ),
+    FloatingActionButton(onPressed: _getdata)
+  ],
 )
       ],
     ) ;
+  }
+}
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }

@@ -21,11 +21,7 @@ class Air extends StatelessWidget {
     );
   }
 }
-//  void _getData(){
-//   final db = FirebaseFirestore.instance;
-//   final rel=db.collection('data').get().then((value) =>print(value) );
 
-//  }
 
 class TabAir extends StatefulWidget{
   @override
