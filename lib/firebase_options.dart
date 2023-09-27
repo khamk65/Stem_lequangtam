@@ -44,40 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAo_P16eNg36uR-w8ZK516Kjf0BARjrxfw',
-    appId: '1:625532914770:web:700f5f2c5ba62171e8638b',
-    messagingSenderId: '625532914770',
-    projectId: 'bkfet-cf67d',
-    authDomain: 'bkfet-cf67d.firebaseapp.com',
-    storageBucket: 'bkfet-cf67d.appspot.com',
-    measurementId: 'G-9SY4HB8LSH',
+    apiKey: 'AIzaSyBaBlScNte1Cyatbpo3ySkTGhCMrtyA1uI',
+    appId: '1:442847638412:web:98e944e8e11fb211889ca9',
+    messagingSenderId: '442847638412',
+    projectId: 'levantam-f144e',
+    authDomain: 'levantam-f144e.firebaseapp.com',
+    databaseURL: 'https://levantam-f144e-default-rtdb.firebaseio.com',
+    storageBucket: 'levantam-f144e.appspot.com',
+    measurementId: 'G-5H04NK2S5Q',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAMmlW3vdzHBVz0GY6qQlQWTAGiHsA45Q4',
-    appId: '1:625532914770:android:f5dc2576a219027be8638b',
-    messagingSenderId: '625532914770',
-    projectId: 'bkfet-cf67d',
-    storageBucket: 'bkfet-cf67d.appspot.com',
+    apiKey: 'AIzaSyDpIPgY7ZAHGwroESYsjPn4-TsAJSe8GfM',
+    appId: '1:442847638412:android:78de2d0fa2a27620889ca9',
+    messagingSenderId: '442847638412',
+    projectId: 'levantam-f144e',
+    databaseURL: 'https://levantam-f144e-default-rtdb.firebaseio.com',
+    storageBucket: 'levantam-f144e.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB526Muzq9GSEbYuvoWEmY3iH3AcAxkmEc',
-    appId: '1:625532914770:ios:d17a0612874318e1e8638b',
-    messagingSenderId: '625532914770',
-    projectId: 'bkfet-cf67d',
-    storageBucket: 'bkfet-cf67d.appspot.com',
-    iosClientId: '625532914770-se76tme1v0nt7hkprm7q8tgsqpptv46d.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDS_y0XlsiXECiixJzbfINbtLIScOBp1Nk',
+    appId: '1:442847638412:ios:a91354bc4894f518889ca9',
+    messagingSenderId: '442847638412',
+    projectId: 'levantam-f144e',
+    databaseURL: 'https://levantam-f144e-default-rtdb.firebaseio.com',
+    storageBucket: 'levantam-f144e.appspot.com',
     iosBundleId: 'com.example.app2',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB526Muzq9GSEbYuvoWEmY3iH3AcAxkmEc',
-    appId: '1:625532914770:ios:d17a0612874318e1e8638b',
-    messagingSenderId: '625532914770',
-    projectId: 'bkfet-cf67d',
-    storageBucket: 'bkfet-cf67d.appspot.com',
-    iosClientId: '625532914770-se76tme1v0nt7hkprm7q8tgsqpptv46d.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDS_y0XlsiXECiixJzbfINbtLIScOBp1Nk',
+    appId: '1:442847638412:ios:a91354bc4894f518889ca9',
+    messagingSenderId: '442847638412',
+    projectId: 'levantam-f144e',
+    databaseURL: 'https://levantam-f144e-default-rtdb.firebaseio.com',
+    storageBucket: 'levantam-f144e.appspot.com',
     iosBundleId: 'com.example.app2',
   );
 }

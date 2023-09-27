@@ -5,10 +5,10 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../../themes/spacing.dart';
 
 class wigetAir extends StatelessWidget {
-  wigetAir({Key? key, required this.docCO2, required this.docCO, required this.docPM25, DateTime? lastUpdateTime}) : super(key: key);
+  wigetAir({Key? key, required this.docCO2,  required this.docPM25, DateTime? lastUpdateTime}) : super(key: key);
 
   final List<String> docCO2;
-  final List<String> docCO;
+  
   final List<String> docPM25;
 
   double? calculateAQIFromPM25(double pm25, double conversionFactor) {

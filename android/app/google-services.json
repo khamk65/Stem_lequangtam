@@ -1,43 +1,27 @@
 {
   "project_info": {
-    "project_number": "625532914770",
-    "project_id": "bkfet-cf67d",
-    "storage_bucket": "bkfet-cf67d.appspot.com"
+    "project_number": "442847638412",
+    "firebase_url": "https://levantam-f144e-default-rtdb.firebaseio.com",
+    "project_id": "levantam-f144e",
+    "storage_bucket": "levantam-f144e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:625532914770:android:f5dc2576a219027be8638b",
+        "mobilesdk_app_id": "1:442847638412:android:78de2d0fa2a27620889ca9",
         "android_client_info": {
           "package_name": "com.example.app2"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "625532914770-qurvln7lbq5a1sj8icjgek63rksn6cdc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAMmlW3vdzHBVz0GY6qQlQWTAGiHsA45Q4"
+          "current_key": "AIzaSyDpIPgY7ZAHGwroESYsjPn4-TsAJSe8GfM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "625532914770-qurvln7lbq5a1sj8icjgek63rksn6cdc.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "625532914770-se76tme1v0nt7hkprm7q8tgsqpptv46d.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.app2"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
