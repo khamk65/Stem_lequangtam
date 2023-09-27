@@ -5,10 +5,11 @@ import '../../../themes/spacing.dart';
 
 class wigetWet extends StatelessWidget {
   const wigetWet({Key? key, required this.docDoAm, DateTime? lastUpdateTime}) : super(key: key);
-final List<String> docDoAm;
+  final List<num> docDoAm;
+
   @override
   Widget build(BuildContext context) {
-    String wet = docDoAm.isNotEmpty ? docDoAm.first : '';
+    num wet = docDoAm.isNotEmpty ? docDoAm.first : 0.0;
 
     return Column(
       children: [
@@ -50,7 +51,7 @@ final List<String> docDoAm;
                     ],
                     pointers: <GaugePointer>[
                       NeedlePointer(
-                        value: double.tryParse(wet) ?? 0.0,
+                        value: wet.toDouble(),
                         enableAnimation: true,
                       ),
                     ],

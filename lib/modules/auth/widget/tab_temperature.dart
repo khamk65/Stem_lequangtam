@@ -3,35 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class TabTemperature extends StatelessWidget {
-  final List<String> docNhietDo;
+  final List<num> docNhietDo;
 
   const TabTemperature({Key? key, required this.docNhietDo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String temperature = docNhietDo.isNotEmpty ? docNhietDo.first : '';
+    num temperature = docNhietDo.isNotEmpty ? docNhietDo.first : 0.0;
 
     return Column(
       children: [
         Spacing.h24,
         SfLinearGauge(
           labelFormatterCallback: (label) {
-            if (label == '0') {
+            if (label == 0) {
               return 'Start';
             }
-            if (label == '15') {
+            if (label == 15) {
               return 'Cold';
             }
-            if (label == '25') {
+            if (label == 25) {
               return 'Cool';
             }
-            if (label == '35') {
+            if (label == 35) {
               return 'High';
             }
-            if (label == '50') {
+            if (label == 50) {
               return 'Very High';
             }
-            return label;
+            return label.toString();
           },
           minimum: 0,
           maximum: 50,
@@ -44,7 +44,7 @@ class TabTemperature extends StatelessWidget {
               shapeType: LinearShapePointerType.diamond,
               height: 25,
               width: 25,
-              value: double.tryParse(temperature) ?? 0.0,
+              value: temperature.toDouble(),
             )
           ],
           orientation: LinearGaugeOrientation.vertical,
@@ -64,7 +64,7 @@ class TabTemperature extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        Text('Temperature: $temperature'), // Hiển thị dữ liệu nhiệt độ từ TabAir
+        Text('Temperature: $temperature'),
       ],
     );
   }

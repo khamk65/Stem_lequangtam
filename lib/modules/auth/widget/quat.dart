@@ -66,7 +66,7 @@ class _QuatState extends State<Quat> {
                 toggleQuat();
               },
               child: Text(
-                isQuatOn ? 'Tắt Bơm Nước' : 'Bật Bơm Nước',
+                isQuatOn ? 'Tắt quạt' : 'Bật quạt',
                 style: TextStyle(fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(

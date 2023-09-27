@@ -32,43 +32,45 @@ class TabAir extends StatefulWidget {
 
 class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
   late TabController _tabController;
-
-
-//  DatabaseReference _databaseReference1= FirebaseDatabase.instance.ref().child('chungcu/dulieudoc');
-//  DatabaseReference _databaseReference2= FirebaseDatabase.instance.ref().child('chungcu/dulieudoc');
-//  DatabaseReference _databaseReference3= FirebaseDatabase.instance.ref().child('chungcu/dulieudoc'); 
-
-final StreamController<Map<String, dynamic>> _airStreamController = StreamController<Map<String, dynamic>>();
-//   final StreamController<Map<String, dynamic>> _humidityStreamController = StreamController<Map<String, dynamic>>();
-//   final StreamController<Map<String, dynamic>> _temperatureStreamController = StreamController<Map<String, dynamic>>();
-  final StreamController<Map<String, dynamic>> _airStreamController1 = StreamController<Map<String, dynamic>>();
-final StreamController<Map<String, dynamic>> _airStreamController2 = StreamController<Map<String, dynamic>>();
+   late DatabaseReference _databaseReference;
+ final StreamController<Map<String, dynamic>> _dataStreamController =
+      StreamController<Map<String, dynamic>>();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
     _tabController.animateTo(2);
-_airStreamController = StreamController<Map<String, dynamic>>();
-   
-
-
+    _databaseReference = FirebaseDatabase.instance.ref().child('chungcu/dulieudoc');
+    _setupDataStream();
   }
-@override
+   void _setupDataStream() {
+    _databaseReference.onValue.listen((event) {
+      if (event.snapshot.value != null && event.snapshot.value is Map) {
+        final data = event.snapshot.value as Map<String, dynamic>;
+        // Trích xuất các giá trị bạn cần và đưa chúng vào stream
+        final co2 = data['co2'] as num;Color.fromARGB(255, 35, 167, 40);
+        final bui = data['bui'] as num;
+        final doam = data['doam'] as num;
+        final gas = data['gas'] as num;
+        final nhietdo = data['nhietdo'] as num;
+
+        _dataStreamController.add({
+          'co2': co2,
+          'bui': bui,
+          'doam': doam,
+          'gas': gas,
+          'nhietdo': nhietdo,
+        });
+      }
+    });
+  }
+
+  @override
   void dispose() {
-    // Giải phóng tài nguyên khi không cần thiết
-    _airStreamController.close();
-    
-     _airStreamController1.close();
-      _airStreamController2.close();
+    _dataStreamController.close();
     super.dispose();
   }
-  // @override
-  // void dispose() {
-  //   // Hủy đăng ký lắng nghe và giải phóng tài nguyên khi widget bị xóa
-  //   _databaseReference1.dispose();
-  //   super.dispose();
-  // }
 void updateSensorStatus(String sensorName, int newValue) {
     DatabaseReference statusSensorReference = FirebaseDatabase.instance.ref().child('chungcu/statusSensor');
     statusSensorReference.update({sensorName: newValue});
@@ -88,14 +90,7 @@ void updateSensorStatus(String sensorName, int newValue) {
 
 
   ];
-// @override
-//   void dispose() {
-// print("1");
-//     _databaseReference1.remove();
-//         _databaseReference2.remove();
-//             _databaseReference3.remove();
-//     super.dispose();
-//   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,82 +140,59 @@ void updateSensorStatus(String sensorName, int newValue) {
         controller: _tabController,
         children: [
  Center(
-  child: StreamBuilder(
-    stream: _airStreamController.stream,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-Map<dynamic, dynamic> data3 = snapshot.data as Map<dynamic, dynamic>;
-
-        // Trích xuất dữ liệu từ Firebase Realtime Database ở đây và truyền vào widget tương ứng
-        String co2 = data3['co2'];
-       String bui=data3['bui'];
-
-        // Biến co2 và bui thành danh sách
-        List<String> co2List = [co2];
-       List<String> buiList=[bui];
-
-        return wigetAir(docCO2: co2List, docPM25: buiList);
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        return CircularProgressIndicator();
-      }
-    },
-  )
-  ,
-),
+            child: StreamBuilder<Map<String, dynamic>>(
+              stream: _dataStreamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data!;
+                  final co2 = data['co2'] as num;
+                  final bui = data['bui'] as num;
+                  // Truyền giá trị co2 và bui vào widget tương ứng
+                  return wigetAir(docCO2: co2, docPM25: bui);
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
 
 
       Center(
-  child: StreamBuilder(
-    stream: _airStreamController1.stream,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-Map<dynamic, dynamic> data2 = snapshot.data as Map<dynamic, dynamic>;
-
-        // Trích xuất dữ liệu từ Firebase Realtime Database ở đây và truyền vào widget tương ứng
-        String doam = data2['doam'];
-       
-
-        // Biến co2 và bui thành danh sách
-        List<String> nhietdoList = [doam];
-       
-
-        return wigetWet(docDoAm: nhietdoList);
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        return CircularProgressIndicator();
-      }
-    },
-  ),
-),
-
-
-                Center(
-  child: StreamBuilder(
-    stream:_airStreamController2.stream,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-Map<dynamic, dynamic> data1 = snapshot.data as Map<dynamic, dynamic>;
-
-        // Trích xuất dữ liệu từ Firebase Realtime Database ở đây và truyền vào widget tương ứng
-        String nhietdo = data1['nhietdo'];
-       
-
-        // Biến co2 và bui thành danh sách
-        List<String> nhietdoList = [nhietdo];
-       
-
-        return TabTemperature(docNhietDo: nhietdoList);
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        return CircularProgressIndicator();
-      }
-    },
-  ),
-),
+            child: StreamBuilder<Map<String, dynamic>>(
+              stream: _dataStreamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data!;
+                  final doam = data['doam'] as num;
+                  // Truyền giá trị độ ẩm vào widget tương ứng
+                  return WetWidget(doam: doam);
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
+          Center(
+            child: StreamBuilder<Map<String, dynamic>>(
+              stream: _dataStreamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data!;
+                  final nhietdo = data['nhietdo'] as num;
+                  // Truyền giá trị nhiệt độ vào widget tương ứng
+                  return TabTemperature(docNhietDo: nhietdo);
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
            Center(
             child:  GasScreen()               
           ),
