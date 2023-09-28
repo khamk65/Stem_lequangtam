@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -21,14 +20,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      
-
-        
-        onGenerateRoute: AppRouter.instance.onGenerateRoute,
-      );
-        
-}
+    return MaterialApp(
+      onGenerateRoute: AppRouter.instance.onGenerateRoute,
+    );
+  }
 }
 // class MyApp2 extends StatelessWidget {
 //   const MyApp2({super.key});
