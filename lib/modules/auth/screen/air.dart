@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -26,17 +27,15 @@ class Air extends StatelessWidget {
   }
 }
 
-class TabAir extends StatefulWidget { 
+class TabAir extends StatefulWidget {
   late final AudioPlayer audioPlayer;
   @override
   _TabAirState createState() => _TabAirState();
 }
 
 class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
-  
   late TabController _tabController;
 
- 
   @override
   void initState() {
     super.initState();
@@ -58,7 +57,7 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
 
           // Kiểm tra nếu gas = 1 thì hiển thị thông báo kèm đổ chuông
           if (gas == 1) {
-          sound();
+            sound();
             _showGasAlert();
           }
         });
@@ -66,13 +65,15 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
     });
   }
 
-void sound() async {
-  print("test");
- AudioPlayer player = new AudioPlayer();
-const alarmAudioPath = "assets/music/coi.mp3";
-player.play(alarmAudioPath as Source);
-}
+  void sound() async {
+    print("test");
+    AudioPlayer player = new AudioPlayer();
+    const alarmAudioPath = "assets/music/coi.mp3";
+    player.play(alarmAudioPath as Source);
+  }
+
   void _showGasAlert() {
+    AssetsAudioPlayer.newPlayer().open(Audio("assets/music/coi.mp3"));
     sound();
     showDialog(
       context: context,
@@ -113,7 +114,8 @@ player.play(alarmAudioPath as Source);
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop(); // Đóng hộp thoại khi người dùng bấm nút
+                    Navigator.of(context)
+                        .pop(); // Đóng hộp thoại khi người dùng bấm nút
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red, // Màu nền của nút
@@ -130,7 +132,6 @@ player.play(alarmAudioPath as Source);
             ),
           ),
         );
-        
       },
     );
   }
