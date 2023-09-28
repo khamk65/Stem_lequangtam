@@ -1,15 +1,39 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import '../../../themes/spacing.dart';
+class wigetWet extends StatefulWidget {
+  @override
+  _wigetWetState createState() => _wigetWetState();
+}
 
-class wigetWet extends StatelessWidget {
-  const wigetWet({Key? key, required this.docDoAm, DateTime? lastUpdateTime}) : super(key: key);
-  final List<num> docDoAm;
+class _wigetWetState extends State<wigetWet> {
+  DatabaseReference _databaseReference =
+      FirebaseDatabase.instance.reference().child('chungcu/dulieudoc');
+
+  double? doAm;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupStream();
+  }
+
+  void _setupStream() {
+    _databaseReference.child('doam').onValue.listen((event) {
+      final dynamic data = event.snapshot.value;
+
+      if (data != null) {
+        setState(() {
+          doAm = data.toDouble();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    num wet = docDoAm.isNotEmpty ? docDoAm.first : 0.0;
+    double wet = doAm ?? 0.0;
 
     return Column(
       children: [
@@ -17,8 +41,9 @@ class wigetWet extends StatelessWidget {
           width: 400,
           child: Column(
             children: [
-              Spacing.h16,
+              SizedBox(height: 16),
               SfRadialGauge(
+                // Các thiết lập cho RadialGauge
                 axes: <RadialAxis>[
                   RadialAxis(
                     minimum: 0,
@@ -51,7 +76,7 @@ class wigetWet extends StatelessWidget {
                     ],
                     pointers: <GaugePointer>[
                       NeedlePointer(
-                        value: wet.toDouble(),
+                        value: wet,
                         enableAnimation: true,
                       ),
                     ],
@@ -71,6 +96,7 @@ class wigetWet extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 16),
               Text(
                 'Công tơ đo độ âm',
                 style: TextStyle(

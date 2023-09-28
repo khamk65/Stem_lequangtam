@@ -21,7 +21,7 @@ class _WaterPumpControlScreenState extends State<WaterPumpControlScreen> {
     // Lắng nghe thay đổi trạng thái bơm nước từ Firebase Realtime Database
     _statusSensorReference.onValue.listen((event) {
       setState(() {
-        isPumpOn = event.snapshot.value == 0;
+        isPumpOn = event.snapshot.value == 1;
       });
     });
   }

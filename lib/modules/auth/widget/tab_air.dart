@@ -1,40 +1,46 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../themes/spacing.dart';
 
-class wigetAir extends StatelessWidget {
-  wigetAir({Key? key, required this.docCO2, required this.docPM25, DateTime? lastUpdateTime}) : super(key: key);
+class wigetAir extends StatefulWidget {
+  @override
+  _wigetAirState createState() => _wigetAirState();
+}
 
-  final List<num> docCO2;
-  final List<num> docPM25;
-  
-  num? calculateAQIFromPM25(num pm25, num conversionFactor) {
-    num? aqi;
+class _wigetAirState extends State<wigetAir> {
+  DatabaseReference _databaseReference =
+      FirebaseDatabase.instance.reference().child('chungcu/dulieudoc');
 
-    // Define the representative values of concentration levels and corresponding AQI
-    num i_lo = 0;
-    num i_hi = 50;
-    num c_lo = 0;
-    num c_hi = 12;
+  double? co2;
+  double? bui;
 
-    // Convert PM2.5 concentration from ppm to μg/m³
-    num concentration = pm25 * conversionFactor / 1000;
-
-    // Calculate AQI using the formula
-    aqi = ((i_hi - i_lo) / (c_hi - c_lo)) * (concentration - c_lo) + i_lo;
-
-    return aqi;
+  @override
+  void initState() {
+    super.initState();
+    _setupStream();
   }
+void _setupStream() {
+  _databaseReference.child('bui').onValue.listen((event) {
+    final dynamic data = event.snapshot.value;
+
+    if (data != null) {
+      setState(() {
+        bui = data.toDouble();
+      });
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
-    num conversionFactor = 25; // Conversion factor from ppm to μg/m³
+    double conversionFactor = 25; // Conversion factor from ppm to μg/m³
 
-    num pm25 = docPM25.isNotEmpty ? docPM25.first : 0.0; // Get the first PM2.5 concentration value
+    double pm25 = bui ?? 0.0; // Use bui data to calculate AQI
 
-    num? aqi = calculateAQIFromPM25(pm25, conversionFactor); // Calculate AQI
+    double? aqi = calculateAQIFromPM25(pm25, conversionFactor); // Calculate AQI
 
     return Column(
       children: [
@@ -63,7 +69,7 @@ class wigetAir extends StatelessWidget {
                     Column(
                       children: [
                         Text('US AQI', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
-                        Text( aqi != null ? aqi.toStringAsFixed(1) : ''),
+                        Text(aqi != null ? aqi.toStringAsFixed(1) : ''),
                       ],
                     ),
                     ClipOval(
@@ -89,31 +95,23 @@ class wigetAir extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Spacing.h12,
-                    Text(''),
-                    Spacing.h12,
+                    SizedBox(height: 16),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Column(
-                            children: [
-                              const Text('CO2(ug/m^3)', style: TextStyle(color: Colors.blue)),
-                              Text(docCO2.isNotEmpty ? docCO2.first.toString() : ''),
-                            ],
-                          ),
+                          // Column(
+                          //   children: [
+                          //     const Text('CO2(ug/m^3)', style: TextStyle(color: Colors.blue)),
+                          //     Text(co2 != null ? co2.toString() : ''),
+                          //   ],
+                          // ),
                           Column(
                             children: [
                               Text('bụi(ppm)', style: TextStyle(color: Colors.blue)),
-                              Text(docPM25.isNotEmpty ? docPM25.first.toString() : ''),
+                              Text(bui != null ? bui.toString() : ''),
                             ],
                           ),
-                          // Column(
-                          //   children: [
-                          //     Text('CO(ug/m^3)', style: TextStyle(color: Colors.blue)),
-                          //     Text(docCO.isNotEmpty ? docCO.first : ''),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
@@ -168,5 +166,23 @@ class wigetAir extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  double? calculateAQIFromPM25(double pm25, double conversionFactor) {
+    double? aqi;
+
+    // Define the representative values of concentration levels and corresponding AQI
+    double i_lo = 0;
+    double i_hi = 50;
+    double c_lo = 0;
+    double c_hi = 12;
+
+    // Convert PM2.5 concentration from ppm to μg/m³
+    double concentration = pm25 * conversionFactor / 1000;
+
+    // Calculate AQI using the formula
+    aqi = ((i_hi - i_lo) / (c_hi - c_lo)) * (concentration - c_lo) + i_lo;
+
+    return aqi;
   }
 }

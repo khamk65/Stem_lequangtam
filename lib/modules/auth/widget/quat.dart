@@ -21,7 +21,7 @@ class _QuatState extends State<Quat> {
     // Lắng nghe thay đổi trạng thái bơm nước từ Firebase Realtime Database
     _statusSensorReference.onValue.listen((event) {
       setState(() {
-        isQuatOn = event.snapshot.value == 0;
+        isQuatOn = event.snapshot.value == 1;
       });
     });
   }

@@ -1,19 +1,43 @@
-import 'package:app2/themes/spacing.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class TabTemperature extends StatelessWidget {
-  final List<num> docNhietDo;
+class TabTemperature extends StatefulWidget {
+  @override
+  _TabTemperatureState createState() => _TabTemperatureState();
+}
 
-  const TabTemperature({Key? key, required this.docNhietDo}) : super(key: key);
+class _TabTemperatureState extends State<TabTemperature> {
+  DatabaseReference _databaseReference =
+      FirebaseDatabase.instance.reference().child('chungcu/dulieudoc');
+
+  double? nhietdo;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupStream();
+  }
+
+  void _setupStream() {
+    _databaseReference.child('nhietdo').onValue.listen((event) {
+      final dynamic data = event.snapshot.value;
+
+      if (data != null) {
+        setState(() {
+          nhietdo = data.toDouble();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    num temperature = docNhietDo.isNotEmpty ? docNhietDo.first : 0.0;
+    double temperature = nhietdo ?? 0.0;
 
     return Column(
       children: [
-        Spacing.h24,
+        SizedBox(height: 24),
         SfLinearGauge(
           labelFormatterCallback: (label) {
             if (label == 0) {
@@ -44,7 +68,7 @@ class TabTemperature extends StatelessWidget {
               shapeType: LinearShapePointerType.diamond,
               height: 25,
               width: 25,
-              value: temperature.toDouble(),
+              value: temperature,
             )
           ],
           orientation: LinearGaugeOrientation.vertical,
@@ -55,7 +79,7 @@ class TabTemperature extends StatelessWidget {
             LinearGaugeRange(startValue: 35, endValue: 50, color: Colors.red),
           ],
         ),
-        Spacing.h16,
+        SizedBox(height: 16),
         Text(
           'Nhiệt kế',
           style: TextStyle(
