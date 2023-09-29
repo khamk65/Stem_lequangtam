@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
-
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -43,6 +43,7 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
     _tabController = TabController(length: 7, vsync: this);
     _tabController.animateTo(2);
     _setupGasStream();
+    _setupkhiGasStream();
   }
 
   void _setupGasStream() {
@@ -58,21 +59,41 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
 
           // Kiểm tra nếu gas = 1 thì hiển thị thông báo kèm đổ chuông
           if (gas == 1) {
-          sound();
+         
             _showGasAlert();
           }
         });
       }
     });
   }
+  void _setupkhiGasStream() {
+    DatabaseReference gasReference1 =
+        FirebaseDatabase.instance.ref().child('chungcu/dulieudoc/khigas');
 
+    gasReference1.onValue.listen((event) {
+      final dynamic data = event.snapshot.value;
+
+      if (data != null) {
+        setState(() {
+          double gas = data.toDouble();
+
+          // Kiểm tra nếu gas = 1 thì hiển thị thông báo kèm đổ chuông
+          if (gas != 0) {
+      
+    _showGasAlert1();
+          }
+        });
+      }
+    });
+  }
 void sound() async {
-  print("test");
+  print("test1");
  AudioPlayer player = new AudioPlayer();
 const alarmAudioPath = "assets/music/coi.mp3";
 player.play(alarmAudioPath as Source);
 }
   void _showGasAlert() {
+    AssetsAudioPlayer.newPlayer().open(Audio("assets/music/coi.mp3"));
     sound();
     showDialog(
       context: context,
@@ -105,6 +126,69 @@ player.play(alarmAudioPath as Source);
                 SizedBox(height: 16.0),
                 Text(
                   'Hãy thực hiện biện pháp cứu hỏa ngay lập tức.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
+                SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Đóng hộp thoại khi người dùng bấm nút
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // Màu nền của nút
+                  ),
+                  child: Text(
+                    'Đóng',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        
+      },
+    );
+  }
+ void _showGasAlert1() {
+    AssetsAudioPlayer.newPlayer().open(Audio("assets/music/coi1.mp3"));
+    sound();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 5.0,
+          backgroundColor: Colors.white,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            width: 300.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  Icons.warning,
+                  color: Colors.red,
+                  size: 48.0,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Phát hiện khí gas!',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Hãy thực hiện biện pháp thoát hiểm kịp thời.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,

@@ -54,6 +54,7 @@ dependencies:
   firebase_database: ^10.2.2
   audioplayers: ^4.1.0
   just_audio: ^0.9.35
+  assets_audio_player: ^3.1.1
   
  
 
@@ -86,7 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-    - assets/music/coi.mp3
+    - assets/music/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

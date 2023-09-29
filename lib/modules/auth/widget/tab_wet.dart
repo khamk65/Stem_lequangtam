@@ -9,7 +9,7 @@ class wigetWet extends StatefulWidget {
 
 class _wigetWetState extends State<wigetWet> {
   DatabaseReference _databaseReference =
-      FirebaseDatabase.instance.reference().child('chungcu/dulieudoc');
+      FirebaseDatabase.instance.ref().child('chungcu/dulieudoc');
 
   double? doAm;
 

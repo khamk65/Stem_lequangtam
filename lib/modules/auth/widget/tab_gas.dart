@@ -1,7 +1,47 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class GasScreen extends StatelessWidget {
+class GasScreen extends StatefulWidget {
+  @override
+  _GasScreenState createState() => _GasScreenState();
+}
+
+class _GasScreenState extends State<GasScreen> {
+  DatabaseReference _databaseReference =
+      FirebaseDatabase.instance.ref().child('chungcu/dulieudoc');
+  late double gasValue;
+  List<FlSpot> gasData = []; // Danh sách chứa dữ liệu khí gas
+
+  @override
+  void initState() {
+    super.initState();
+    _setupStream();
+  }
+
+  void _setupStream() {
+    _databaseReference.child('khigas').onValue.listen((event) {
+      final dynamic data = event.snapshot.value;
+
+      if (data != null) {
+        setState(() {
+          gasValue = data.toDouble();
+         
+
+          // Thêm dữ liệu mới vào danh sách và giới hạn số lượng điểm
+          gasData.add(FlSpot(gasData.length.toDouble(), gasValue));
+          if (gasData.length > 10) {
+            gasData.removeAt(0);
+          }
+        });
+      }
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +53,7 @@ class GasScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Nồng độ khí gas: 0.00',
+              'Nồng độ khí gas: ${gasValue.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 20),
             ),
             Container(
@@ -31,17 +71,12 @@ class GasScreen extends StatelessWidget {
                     ),
                   ),
                   minX: 0,
-                  maxX: 10,
+                  maxX: 100,
                   minY: 0,
-                  maxY: 1,
+                  maxY: 100,
                   lineBarsData: [
                     LineChartBarData(
-                      spots: [
-                        FlSpot(0, 0.2),
-                        FlSpot(1, 0.5),
-                        FlSpot(2, 0.8),
-                        // Thêm các điểm dữ liệu thời gian và nồng độ khí gas ở đây
-                      ],
+                      spots: gasData, // Sử dụng danh sách dữ liệu khí gas
                       isCurved: true,
                       colors: [Colors.blue],
                       belowBarData: BarAreaData(show: false),
