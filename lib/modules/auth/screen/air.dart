@@ -5,8 +5,9 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../../themes/spacing.dart';
+import '../widget/notifiacation.dart';
 import '../widget/tab_air.dart';
 import '../widget/tab_temperature.dart';
 import '../widget/tab_wet.dart';
@@ -14,9 +15,11 @@ import '../widget/controlWater.dart';
 import '../widget/control.dart';
 import '../widget/tab_gas.dart';
 import '../widget/quat.dart';
-
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 class Air extends StatelessWidget {
-  const Air({Key? key}) : super(key: key);
+
+   Air({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +47,60 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
     _tabController.animateTo(2);
     _setupGasStream();
     _setupkhiGasStream();
+    Noti.initializeNotifications(flutterLocalNotificationsPlugin);
   }
+Future<void> showNotificationWithSound() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'your_channel_id', // Thay đổi thành ID kênh thông báo của bạn
+    'Tên kênh',
+ playSound: true,
+    importance: Importance.high,
+    priority: Priority.high,
+    sound: RawResourceAndroidNotificationSound('coi1'), // Tùy chỉnh âm thanh thông báo
+  );
 
+
+
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+ 
+  );
+
+  await flutterLocalNotificationsPlugin.show(
+    0, // ID thông báo
+    'Thông báo phát hiện khí gas',
+    'Mọi người cần xử lý,thoát hiểm ngay',
+    platformChannelSpecifics,
+    payload: 'Custom_Sound', // Payload tùy chọn để xử lý khi thông báo được nhấn
+  );
+}
+Future<void> showNotificationWithSound1() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'your_channel_id', // Thay đổi thành ID kênh thông báo của bạn
+    'Tên kênh',
+ playSound: true,
+    importance: Importance.high,
+    priority: Priority.high,
+    sound: RawResourceAndroidNotificationSound('coi'), // Tùy chỉnh âm thanh thông báo
+  );
+
+
+
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+ 
+  );
+
+  await flutterLocalNotificationsPlugin.show(
+    0, // ID thông báo
+    'Thông báo phát hiện lửa',
+    'Mọi người cần xử lý,thoát hiểm ngay',
+    platformChannelSpecifics,
+    payload: 'Custom_Sound', // Payload tùy chọn để xử lý khi thông báo được nhấn
+  );
+}
   void _setupGasStream() {
     DatabaseReference gasReference =
         FirebaseDatabase.instance.ref().child('chungcu/dulieudoc/gas');
@@ -59,7 +114,7 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
 
           // Kiểm tra nếu gas = 1 thì hiển thị thông báo kèm đổ chuông
           if (gas == 1) {
-         
+         showNotificationWithSound1();
             _showGasAlert();
           }
         });
@@ -79,7 +134,7 @@ class _TabAirState extends State<TabAir> with TickerProviderStateMixin {
 
           // Kiểm tra nếu gas = 1 thì hiển thị thông báo kèm đổ chuông
           if (gas != 0) {
-      
+      showNotificationWithSound();
     _showGasAlert1();
           }
         });

@@ -72,7 +72,7 @@ final  _cartCubit=CartCubit();
 
 case RouteName.air:
 return MaterialPageRoute(
-  builder:(context) => const Air(),
+  builder:(context) =>  Air(),
   
 settings: const RouteSettings(name: RouteName.air)
 );
